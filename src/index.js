@@ -35,14 +35,25 @@ async function runAction() {
   });
 
   const workflowRunsForAffectedPrs = workflowRuns.data.workflow_runs.filter(run => run.pull_requests?.some(pr => prMap[pr.number]));
-  await Promise.all(workflowRunsForAffectedPrs.map(async run => {
+
+  const latestRunPerPullRequestMap = {};
+  workflowRunsForAffectedPrs.map(workflowRun => {
+    workflowRun.pull_requests?.map(pr => {
+      latestRunPerPullRequestMap[pr.number] = Math.max(latestRunPerPullRequestMap[pr.number], latestRunPerPullRequestMap[pr.number] || 0);
+    });
+  });
+
+  const latestWorkflowRuns = Object.values(latestRunPerPullRequestMap);
+
+  await Promise.all(latestWorkflowRuns.map(async runId => {
     try {
-      await core.info(`Attempting to rerun: ${run.id}`);
+      await core.info(`Attempting to rerun: ${runId}`);
       await octokit.rest.actions.reRunWorkflow({
-        owner, repo, run_id: run.id
+        owner, repo, run_id: runId
       });
     } catch (error) {
-      core.error(`Failed to automatically retrigger pull request: ${run.pull_requests?.map(pr => pr.number).join(',')}: ${error.status} - ${error.message}`);
+      const workflowRun = workflowRunsForAffectedPrs.find(run => run.id === runId);
+      core.error(`Failed to automatically retrigger pull request: ${workflowRun.pull_requests?.map(pr => pr.number).join(',')}: ${error.status} - ${error.message}`);
     }
   }));
 }
