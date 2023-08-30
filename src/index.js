@@ -4,13 +4,15 @@ const github = require('@actions/github');
 async function run() {
   // Attempt to load credentials from the GitHub OIDC provider.
   // const githubSecretAccessToken = core.getInput('github_token');
-  // if (!githubSecretAccessToken) {
-  //   core.setFailed("Missing use with configuration in the github action, please add to the github workflow: 'github_token: ${{ secrets.GITHUB_TOKEN }}'");
-  //   core.getInput('github_token', { required: true });
-  // }
+  const { token: githubSecretAccessToken } = github.context;
+  if (!githubSecretAccessToken) {
+    core.setFailed("Missing use with configuration in the github action, please add to the github workflow: 'github_token: ${{ secrets.GITHUB_TOKEN }}'");
+    core.getInput('github_token', { required: true });
+    throw Error('InvalidInput');
+  }
 
   // https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-contex
-  const { repository, repository_owner: owner, ref_name: currentRef, token: githubSecretAccessToken, ref_type: triggerType } = github.context;
+  const { repository, repository_owner: owner, ref_name: currentRef, ref_type: triggerType } = github.context;
   if (triggerType !== 'branch') {
     core.info(`Skipping check because trigger type is not branch. Trigger Type: ${triggerType}, Ref: ${currentRef}`);
     return;
