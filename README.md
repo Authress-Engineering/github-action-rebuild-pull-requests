@@ -13,9 +13,6 @@ This GitHub action exists because GitHub will not re-trigger builds. That means 
 In your GitHub action workflow add the follow step.
 
 ```yaml
-on:
-  workflow_dispatch:
-
 # Important! This is required: https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28
 permissions:
   contents: read
@@ -24,7 +21,7 @@ permissions:
 jobs:
   build:
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     # Put this action anywhere in your GitHub action workflow
     - uses: rhosys/github-action-rebuild-pull-requests@v1
       with:
