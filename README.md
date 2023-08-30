@@ -1,7 +1,7 @@
 # GitHub Action - Automatically Rebuild Pull Requests
 This is a GitHub Action to automatically rebuild pull requests when the pull request target changes.
 
-Review the GitHub action in the marketplace: [GitHub Rebuild PullRequests](https://github.com/marketplace/actions/github-rebuild-pull-requests)
+Review the GitHub action in the marketplace: [GitHub Rebuild Pull Requests](https://github.com/marketplace/actions/github-rebuild-pull-requests)
 
 ## How does this GitHub action work?
 When a branch in your GitHub repository is updated, this GitHub action automatically finds open pull requests that target that branch and forces a rebuild for them.

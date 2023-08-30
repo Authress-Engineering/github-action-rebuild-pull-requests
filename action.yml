@@ -1,4 +1,4 @@
-name: 'Rebuild Stale PullRequests'
+name: 'Rebuild Stale Pull Requests'
 description: 'Automatically rebuild pull requests when they become stale or the target branch changes.'
 inputs:
   github_token:
