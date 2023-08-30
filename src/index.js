@@ -12,6 +12,7 @@ async function run() {
   // https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-contex
   const { repository, repository_owner: owner, ref_name: currentRef, token: githubSecretAccessToken, ref_type: triggerType } = github.context;
   if (triggerType !== 'branch') {
+    core.info(`Skipping check because trigger type is not branch. Trigger Type: ${triggerType}, Ref: ${currentRef}`);
     return;
   }
 
