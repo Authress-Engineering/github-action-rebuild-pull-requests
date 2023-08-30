@@ -28,19 +28,19 @@ async function runAction() {
   // // https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   // const filteredBranches = branches.data.filter(branch => branch.name !== currentRef);
 
-  const openPullRequests = await octokit.rest.pulls.list({ owner, repo, state: 'open' });
-  core.info(`Open pull requests: [${openPullRequests.data.map(pr => pr.number).join(', ')}]`);
+  const openPullRequestsResponse = await octokit.rest.pulls.list({ owner, repo, state: 'open', base: currentRef, per_page: 100 });
+  core.info(`Relevant open pull requests: [${openPullRequestsResponse.data.map(pr => pr.number).join(', ')}]`);
 
-  const filteredPullRequests = openPullRequests.data.filter(pr => pr.base.ref === currentRef);
-  const prMap = filteredPullRequests.reduce((acc, pr) => { acc[pr.number] = true; return acc; }, {});
+  // const filteredPullRequests = openPullRequests.data.filter(pr => pr.base.ref === currentRef);
+  const prMap = openPullRequestsResponse.data.reduce((acc, pr) => { acc[pr.number] = true; return acc; }, {});
 
   const workflowRuns = await octokit.rest.actions.listWorkflowRuns({
-    owner, repo, workflow_id: workflowTarget // branch: currentRef, event: 'pull_request', created: `>= ${DateTime.utc().minus({ month: 1 }).toISODate()}`
+    owner, repo, workflow_id: workflowTarget, event: 'pull_request', created: `>= ${DateTime.utc().minus({ month: 1 }).toISODate()}`, per_page: 100
   });
 
   const workflowRunsForAffectedPrs = workflowRuns.data.workflow_runs.filter(run => run.pull_requests?.some(pr => prMap[pr.number]));
-  core.info(`All Runs: ${stringify(workflowRuns.data.workflow_runs)}`);
-  core.info(`Filtered Runs: ${stringify(workflowRunsForAffectedPrs)}`);
+  console.log(`All Runs: ${stringify(workflowRuns.data.workflow_runs)}`);
+  console.log(`Filtered Runs: ${stringify(workflowRunsForAffectedPrs)}`);
   await Promise.all(workflowRunsForAffectedPrs.map(async run => {
     try {
       await core.info(`Attempting to rerun: ${run.run_id}`);
