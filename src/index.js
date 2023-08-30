@@ -14,6 +14,10 @@ async function runAction() {
   }
 
   // https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-contex
+  if (!github.context.payload.ref) {
+    core.info('Brand is not part of repository, skipping check.');
+    return;
+  }
   const currentRef = github.context.payload.ref.replace(/^refs\/heads\//, '');
   const workflowTarget = github.context.workflow;
   core.info(`Branch Ref: ${currentRef}, Workflow: ${workflowTarget}`);
