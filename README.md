@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     # Put this action anywhere in your GitHub action workflow
-    - uses: rhosys/github-action-rebuild-pull-requests@v1
+    - uses: rhosys/github-action-rebuild-pull-requests@v1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
