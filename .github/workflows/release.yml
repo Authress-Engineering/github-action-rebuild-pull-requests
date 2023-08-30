@@ -29,6 +29,7 @@ jobs:
         yarn test
     - name: Add node_modules files to release
       run: |
+        git config --global user.email "GitHubActionsRunner@rhosys.ch"
         git config --global user.name "GitHub Actions"
         rm .gitignore
         git add node_modules/*

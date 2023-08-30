@@ -4,7 +4,7 @@ const github = require('@actions/github');
 async function run() {
   // Attempt to load credentials from the GitHub OIDC provider.
   const githubSecretAccessToken = core.getInput('github_token');
-  if (!githubSecretAccessToken) {
+  if (!githubSecretAccessToken || githubSecretAccessToken === '{{ secrets.GITHUB_TOKEN }}') {
     core.setFailed("Missing use with configuration in the github action, please add to the github workflow: 'github_token: {{ secrets.GITHUB_TOKEN }}'");
     core.getInput('github_token', { required: true });
     throw Error('InvalidInput');
