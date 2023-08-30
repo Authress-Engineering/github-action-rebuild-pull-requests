@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const stringify = require('json-stringify-safe');
+// const stringify = require('json-stringify-safe');
 
 async function run() {
   // Attempt to load credentials from the GitHub OIDC provider.
@@ -12,29 +12,30 @@ async function run() {
   }
 
   // https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-contex
-  const { repository, repository_owner: owner, ref_name: currentRef, ref_type: triggerType } = github.context;
-  if (!triggerType) {
-    core.info(stringify(github));
-    core.setFailed('No trigger type set');
-    throw Error('InvalidInput');
-  }
-  if (triggerType !== 'branch') {
-    core.info(`Skipping check because trigger type is not branch. Trigger Type: ${triggerType}, Ref: ${currentRef}`);
-    return;
-  }
+  const currentRef = github.context.payload.ref;
+  const [owner, repo] = github.context.payload.repository.full_name.split('/');
 
   const octokit = github.getOctokit(githubSecretAccessToken);
   const branches = await octokit.rest.repos.listBranches({
     owner: owner,
-    repo: repository
+    repo: repo
   });
   // https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   const filteredBranches = branches.data.filter(branch => branch.name !== currentRef);
+
+  const workflowRuns = await octokit.rest.actions.listWorkflowRuns({
+    owner, repo, workflow_id: github.workflow, branch: currentRef, event: 'pull_request', created: '<= '
+  });
+  workflowRuns.data.workflow_runs.filter(run => run.event)
   await Promise.all(filteredBranches.map(async branch => {
     try {
+      await octokit.rest.actions.reRunWorkflow({
+        owner, repo, run_id: runID
+      });
+      // await octokit.rest.actions
       await octokit.rest.repos.createDispatchEvent({
         owner: owner,
-        repo: repository,
+        repo: repo,
         workflow_id: github.workflow,
         ref: branch
       });
