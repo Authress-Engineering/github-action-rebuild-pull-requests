@@ -1,8 +1,8 @@
 name: 'Rebuild Stale PullRequests'
 description: 'Automatically rebuild pull requests when they become stale or the target branch changes.'
-# inputs:
-#   github_token:
-#     description: 'GITHUB_TOKEN, must be specified to be the value: ${{ secrets.GITHUB_TOKEN }}'
+inputs:
+  github_token:
+    description: 'GITHUB_TOKEN, must be specified to be the value: ${{ secrets.GITHUB_TOKEN }}'
 branding:
   icon: 'arrow-right-circle'
   color: 'green'
