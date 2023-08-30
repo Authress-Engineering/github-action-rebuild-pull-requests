@@ -1,0 +1,41 @@
+on:
+  push:
+    branches:
+    - main
+    - master
+    - 'release/**'
+  pull_request:
+    branches:
+    - main
+    - master
+    - 'release/**'
+
+name: Package
+
+jobs:
+  check:
+    name: Package distribution file
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16.14.2
+        registry-url: 'https://registry.npmjs.org'
+    - name: Package
+      run: |
+        yarn --frozen-lockfile
+        yarn test
+    - name: Add node_modules files to release
+      run: |
+        git config --global user.name "GitHub Actions"
+        rm .gitignore
+        git add node_modules/*
+        git commit -m "Creating release"
+    - name: Create Github Release and Tag
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      run: |
+        git tag v${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER
+        git push origin v${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER || echo "Tag already exists."
+        git push origin HEAD:v${GITHUB_REF/refs\/heads\/release\//} -f

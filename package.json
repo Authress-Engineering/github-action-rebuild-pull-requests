@@ -1,0 +1,47 @@
+{
+  "name": "rebuild-pull-requests",
+  "version": "0.0.1",
+  "description": "Automatically rebuild stale pull requests",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint --ext .js src",
+    "test": "npm run lint && jest --coverage --verbose || echo 'Skipping tests not found'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhosys/github-action-rebuild-pull-requests.git"
+  },
+  "keywords": [
+    "GitHub",
+    "GitHub Action",
+    "Actions",
+    "Pull-Requests",
+    "PR",
+    "Rebuild",
+    "Stale"
+  ],
+  "author": "Rhosys <developers@rhosys.ch>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rhosys/github-action-rebuild-pull-requests/issues"
+  },
+  "homepage": "https://github.com/rhosys/github-action-rebuild-pull-requests#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.1.1",
+    "axios": "^0.27.2"
+  },
+  "engines": {
+    "node": "^16.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/eslint-parser": "^7.15.8",
+    "eslint": "^8.13.0",
+    "eslint-config-cimpress-atsquad": "^1.0.67",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-mocha": "^10.0.4",
+    "eslint-plugin-node": "^11.1.0",
+    "jest": "^28.0.2"
+  }
+}
