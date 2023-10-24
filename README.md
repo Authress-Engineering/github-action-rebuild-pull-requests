@@ -1,6 +1,15 @@
 # GitHub Action - Automatically Rebuild Pull Requests
 This is a GitHub Action to automatically rebuild pull requests when the pull request target changes.
 
+This is an open source project managed by the [Authress Engineering team](https://authress.io).
+
+<p align="center">
+  <a href="https://authress.io" alt="Authress Engineering">
+    <img src="https://img.shields.io/static/v1?label=Authress+Engineering&message=GitHub%20Action&color=%23FBAF0B&logo=androidauto&logoColor=%23FBAF0B"></a>
+  <a href="https://github.com/Rhosys/github-action-rebuild-pull-requests/actions/workflows/release.yml" alt="GitHub Marketplace Link">
+    <img src="https://github.com/Rhosys/github-action-rebuild-pull-requests/actions/workflows/release.yml/badge.svg"></a>
+</p>
+
 Review the GitHub action in the marketplace: [GitHub Rebuild Pull Requests](https://github.com/marketplace/actions/github-rebuild-pull-requests)
 
 ## How does this GitHub action work?
