@@ -10,7 +10,7 @@ This is an open source project managed by the [Authress Engineering team](https:
     <img src="https://github.com/Rhosys/github-action-rebuild-pull-requests/actions/workflows/release.yml/badge.svg"></a>
 </p>
 
-Review the GitHub action in the marketplace: [GitHub Rebuild Pull Requests](https://github.com/marketplace/actions/github-rebuild-pull-requests)
+Review the GitHub action in the marketplace: [GitHub Rebuild Pull Requests](https://github.com/marketplace/actions/rebuild-stale-pullrequests)
 
 ## How does this GitHub action work?
 When a branch in your GitHub repository is updated, this GitHub action automatically finds open pull requests that target that branch and forces a rebuild for them.
